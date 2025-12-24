@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYC TaxiFare AI</title>
+    <link rel="icon" type="image/x-icon" href="/static/icon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#1F2937',
+                        light: '#F9FAFB'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="/static/components/header.js"></script>
+    <script src="/static/components/footer.js"></script>
+</head>
+<body class="font-sans bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+    <custom-header></custom-header>
+
+    <main class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Hero Section -->
+        <section class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                Plan Your Trip Budget Before You Go With Our <span class="text-primary">Smart Fare Estimator</span>
+            </h1>
+            <p class="text-gray-600 text-lg max-w-3xl mx-auto">
+                Powered by machine learning models to give you accurate price predictions in seconds.
+            </p>
+        </section>
+
+        <!-- Main Cards Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Card 1: Trip Details -->
+            <div class="bg-white rounded-2xl shadow-xl p-6 lg:col-span-2">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+                        <i data-feather="map-pin" class="text-primary"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Trip Details</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Pickup Section -->
+                    <div>
+                
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                            <i data-feather="navigation" class="mr-2 text-primary"></i>
+                            Pickup Location
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Filter Type</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="pickupFilterType" value="borough" checked 
+                                               class="mr-2 text-primary focus:ring-primary">
+                                        <span class="text-gray-700">By Borough</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="pickupFilterType" value="service_zone"
+                                               class="mr-2 text-primary focus:ring-primary">
+                                        <span class="text-gray-700">By Service Zone</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Filter Options</label>
+                                <select id="pickupFilter" class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition"></select>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Zone Selection</label>
+                                <select id="pickupZone" class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition"></select>
+                                </select>
+                            </div>
+                            
+                            <input type="hidden" id="PULocationID" value="">
+                        </div>
+                    </div>
+                    
+                    <!-- Drop-off Section -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                            <i data-feather="flag" class="mr-2 text-secondary"></i>
+                            Drop-off Location
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Filter Type</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="dropoffFilterType" value="borough" checked 
+                                               class="mr-2 text-secondary focus:ring-secondary">
+                                        <span class="text-gray-700">By Borough</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="dropoffFilterType" value="service_zone"
+                                               class="mr-2 text-secondary focus:ring-secondary">
+                                        <span class="text-gray-700">By Service Zone</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Filter Options</label>
+                                <select id="dropoffFilter" class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 bg-white focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition"></select>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Zone Selection</label>
+                                <select id="dropoffZone" class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 bg-white focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition"></select>
+                                </select>
+                            </div>
+                            
+                            <input type="hidden" id="DOLocationID" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Time Selection -->
+            <div class="bg-white rounded-2xl shadow-xl p-6">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center mr-4">
+                        <i data-feather="clock" class="text-secondary"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Time Selection</h2>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex space-x-4 mb-6">
+                            <button id="leaveNowBtn" class="flex-1 py-3 px-4 rounded-lg bg-primary text-white font-medium transition hover:bg-primary/90">
+                                Leave Now
+                            </button>
+                            <button id="scheduleLaterBtn" class="flex-1 py-3 px-4 rounded-lg border-2 border-gray-300 text-gray-700 font-medium transition hover:border-primary hover:text-primary">
+                                Schedule Later
+                            </button>
+                        </div>
+                        
+                        <div id="nowSection" class="space-y-4">
+                            <div class="bg-primary/5 rounded-lg p-4">
+                                <p class="text-gray-700">Pickup Time:</p>
+                                <p id="currentTime" class="text-xl font-semibold text-primary"></p>
+                            </div>
+                        </div>
+                        
+                        <div id="laterSection" class="space-y-4 hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Month</label>
+                                    <select id="pickupMonth" class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition"></select>
+                                        <!-- Months will be populated by JavaScript -->
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Day of Week</label>
+                                    <select id="pickupDay" class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition"></select>
+                                        <!-- Days will be populated by JavaScript -->
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Hour</label>
+                                    <div class="flex space-x-2">
+                                        <select id="pickupHour" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 text-gray-900 bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition">
+                                             </select>
+
+                                        <select id="ampm" class="w-24 px-4 py-3 rounded-lg border border-gray-300 text-gray-900 bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition">
+                                             <option value="AM">AM</option>
+                                             <option value="PM">PM</option>
+                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Heuristic Info Display -->
+                    <div id="heuristicInfo" class="bg-gray-50 rounded-lg p-4 hidden">
+                        <h4 class="font-medium text-gray-800 mb-2 flex items-center">
+                            <i data-feather="info" class="mr-2 text-gray-500"></i>
+                            Trip Statistics
+                        </h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="text-sm">
+                                <span class="text-gray-600">Distance:</span>
+                                <span id="tripDistance" class="font-medium ml-2">-</span> mi
+                            </div>
+                            <div class="text-sm">
+                                <span class="text-gray-600">Duration:</span>
+                                <span id="tripDuration" class="font-medium ml-2">-</span> min
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Fare Estimation -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center mr-4">
+                    <i data-feather="dollar-sign" class="text-white"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900">Fare Estimation</h2>
+            </div>
+            
+            <div id="predictionSection" class="text-center py-12">
+                <div class="max-w-md mx-auto">
+                    <i data-feather="dollar-sign" class="w-16 h-16 text-gray-300 mx-auto mb-6"></i>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Ready to Calculate</h3>
+                    <p class="text-gray-600 mb-8">Fill in your trip details above and click Calculate Fare</p>
+                    
+                    <button id="calculateFareBtn" class="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-bold rounded-xl text-lg hover:opacity-90 transition transform hover:-translate-y-0.5 shadow-lg">
+                        Calculate Fare
+                    </button>
+                </div>
+            </div>
+            
+            <div id="resultSection" class="hidden">
+                <!-- Total Amount -->
+                <div class="text-center mb-10 p-8 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-2xl">
+                    <p class="text-gray-600 mb-2">Estimated Total Fare</p>
+                    <div class="text-5xl md:text-6xl font-bold text-gray-900 mb-2">
+                        $<span id="totalAmount">0.00</span>
+                    </div>
+                    <p class="text-gray-500">Including taxes and surcharges</p>
+                </div>
+                
+                <!-- Breakdown Accordion -->
+                <div class="mb-6">
+                    <button id="breakdownToggle" class="flex items-center justify-between w-full text-left py-4 border-t border-gray-200">
+                        <span class="text-lg font-semibold text-gray-900">Fare Breakdown</span>
+                        <i data-feather="chevron-down" class="text-gray-500 transition-transform"></i>
+                    </button>
+                    
+                    <div id="breakdownContent" class="hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Component</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="breakdownTable" class="bg-white divide-y divide-gray-200">
+                                    <!-- Breakdown rows will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button id="newCalculationBtn" class="px-6 py-3 border-2 border-primary text-primary font-medium rounded-lg hover:bg-primary/5 transition">
+                        <i data-feather="refresh-cw" class="w-4 h-4 inline mr-2"></i>
+                        New Calculation
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="loadingSection" class="hidden text-center py-12">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-6"></div>
+                <p class="text-gray-600">Crunching numbers with AI magic...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="errorSection" class="hidden text-center py-12">
+                <i data-feather="alert-triangle" class="w-16 h-16 text-red-500 mx-auto mb-6"></i>
+                <h3 class="text-xl font-semibold text-red-700 mb-2" id="errorTitle"></h3>
+                <p class="text-gray-600 mb-8" id="errorMessage"></p>
+                <button onclick="location.reload()" class="px-6 py-3 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition">
+                    Try Again
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                        <i data-feather="zap" class="text-blue-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900">8.5%</p>
+                        <p class="text-gray-600">Average Error</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                        <i data-feather="database" class="text-green-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900">265</p>
+                        <p class="text-gray-600">Zones Covered</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                        <i data-feather="clock" class="text-purple-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900">0.8s</p>
+                        <p class="text-gray-600">Avg. Prediction Time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <script src="script.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>
